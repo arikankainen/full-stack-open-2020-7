@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Switch, Route, Link, useRouteMatch } from 'react-router-dom'
+import { Switch, Route, Link, useRouteMatch, useHistory } from 'react-router-dom'
 
 const Menu = () => {
   const padding = {
@@ -95,7 +95,18 @@ const CreateNew = (props) => {
       </form>
     </div>
   )
+}
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div>
+      {message}
+    </div>
+  )
 }
 
 const App = () => {
@@ -116,11 +127,21 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(null)
+  const history = useHistory()
+
+  const showNotification = message => {
+    setNotification(message)
+    setTimeout(() => {
+      setNotification(null)
+    }, 10000)
+  }
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    history.push('/')
+    showNotification(`a new anecdote ${anecdote.content} created!`)
   }
 
   const anecdoteById = (id) =>
@@ -146,7 +167,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
-
+      <Notification message={notification} />
       <Switch>
         <Route path="/anecdotes/:id">
           <Anecdote anecdote={anecdote} />
