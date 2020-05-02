@@ -64,7 +64,7 @@ const CreateNew = (props) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
-
+  
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
@@ -73,6 +73,12 @@ const CreateNew = (props) => {
       info: info.value,
       votes: 0
     })
+  }
+
+  const resetFields = () => {
+    content.reset()
+    author.reset()
+    info.reset()
   }
 
   return (
@@ -92,6 +98,7 @@ const CreateNew = (props) => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button type="button" onClick={resetFields}>reset</button>
       </form>
     </div>
   )
