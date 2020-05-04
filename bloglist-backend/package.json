@@ -1,0 +1,45 @@
+{
+  "name": "blogilista",
+  "version": "0.0.1",
+  "description": "palautusrepositorio / osa 4 / blogilista",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "jest --verbose",
+    "lint": "eslint .",
+    "start:test": "cross-env NODE_ENV=test node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arikankainen/full-stack-open-2020-4.git"
+  },
+  "author": "Ari Kankainen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/arikankainen/full-stack-open-2020-4/issues"
+  },
+  "homepage": "https://github.com/arikankainen/full-stack-open-2020-4#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcrypt": "^4.0.1",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "mongoose": "^5.9.9",
+    "mongoose-unique-validator": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "jest": "^25.3.0",
+    "nodemon": "^2.0.3",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
