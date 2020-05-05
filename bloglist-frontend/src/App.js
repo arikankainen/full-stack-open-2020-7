@@ -10,7 +10,7 @@ import storage from './utils/storage'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs, addBlog } from './reducers/blogReducer'
+import { initializeBlogs, addBlog, likeBlog, removeBlog } from './reducers/blogReducer'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -66,17 +66,14 @@ const App = () => {
 
   const handleLike = async (id) => {
     const blogToLike = blogs.find(b => b.id === id)
-    const likedBlog = { ...blogToLike, likes: blogToLike.likes + 1, user: blogToLike.user.id }
-    await blogService.update(likedBlog)
-    //setBlogs(blogs.map(b => b.id === id ?  { ...blogToLike, likes: blogToLike.likes + 1 } : b))
+    dispatch(likeBlog(blogToLike))
   }
 
   const handleRemove = async (id) => {
     const blogToRemove = blogs.find(b => b.id === id)
     const ok = window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`)
     if (ok) {
-      await blogService.remove(id)
-      //setBlogs(blogs.filter(b => b.id !== id))
+      dispatch(removeBlog(blogToRemove))
     }
   }
 
