@@ -4,16 +4,11 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 
-import blogService from './services/blogs'
-import loginService from './services/login'
-import storage from './utils/storage'
-
 import { useSelector, useDispatch } from 'react-redux'
-import { setNotification } from './reducers/notificationReducer'
 import { initializeBlogs, addBlog, likeBlog, removeBlog } from './reducers/blogReducer'
+import { loginUser, logoutUser, loadUser } from './reducers/userReducer'
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -21,6 +16,7 @@ const App = () => {
 
   const notification = useSelector(state => state.notification)
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -28,40 +24,23 @@ const App = () => {
   }, [dispatch])
 
   useEffect(() => {
-    const user = storage.loadUser()
-    setUser(user)
-  }, [])
-
-  const notifyWith = (message, type='success') => {
-    dispatch(setNotification({ message, type }, 5))
-  }
+    dispatch(loadUser())
+  }, [dispatch])
 
   const handleLogin = async (event) => {
     event.preventDefault()
-    try {
-      const user = await loginService.login({
-        username, password
-      })
+    dispatch(loginUser(username, password))
+    setUsername('')
+    setPassword('')
+  }
 
-      setUsername('')
-      setPassword('')
-      setUser(user)
-      notifyWith(`${user.name} welcome back!`)
-      storage.saveUser(user)
-    } catch(exception) {
-      notifyWith('wrong username/password', 'error')
-    }
+  const handleLogout = () => {
+    dispatch(logoutUser())
   }
 
   const createBlog = async (blog) => {
-    try {
-      const newBlog = await blogService.create(blog)
-      blogFormRef.current.toggleVisibility()
-      dispatch(addBlog(newBlog))
-      notifyWith(`a new blog '${newBlog.title}' by ${newBlog.author} added!`)
-    } catch(exception) {
-      console.log(exception)
-    }
+    blogFormRef.current.toggleVisibility()
+    dispatch(addBlog(blog))
   }
 
   const handleLike = async (id) => {
@@ -75,11 +54,6 @@ const App = () => {
     if (ok) {
       dispatch(removeBlog(blogToRemove))
     }
-  }
-
-  const handleLogout = () => {
-    setUser(null)
-    storage.logoutUser()
   }
 
   if ( !user ) {

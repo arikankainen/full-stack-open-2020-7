@@ -6,11 +6,11 @@ const saveUser = (user) =>
 const loadUser = () =>
   JSON.parse(localStorage.getItem(storageKey))
 
-const logoutUser = () =>
+const removeUser = () =>
   localStorage.removeItem(storageKey)
 
 export default {
   saveUser,
   loadUser,
-  logoutUser
+  removeUser
 }
