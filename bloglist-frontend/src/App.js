@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Switch, Route } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import axios from 'axios'
+
+import { initializeBlogs, addBlog, likeBlog, removeBlog } from './reducers/blogReducer'
+import { loginUser, logoutUser, loadUser } from './reducers/loginReducer'
 
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
-
-import { useSelector, useDispatch } from 'react-redux'
-import { initializeBlogs, addBlog, likeBlog, removeBlog } from './reducers/blogReducer'
-import { loginUser, logoutUser, loadUser } from './reducers/loginReducer'
-import axios from 'axios'
 import Users from './components/Users'
+import User from './components/User'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -114,6 +115,9 @@ const App = () => {
       </p>
 
       <Switch>
+        <Route path="/users/:id">
+          <User users={users} />
+        </Route>
         <Route path="/users">
           <Users users={users} />
         </Route>
