@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import { Switch, Route, useRouteMatch, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 
@@ -115,15 +115,32 @@ const App = () => {
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
+  const styleMenu = {
+    backgroundColor: 'rgb(220, 220, 220)',
+    padding: 5,
+  }
+
+  const styleLink = {
+    padding: 10,
+  }
+
+  const styleUser = {
+    padding: 10,
+    paddingLeft: 20,
+  }
+
   return (
     <div>
-      <h2>blogs</h2>
+      <div style={styleMenu}>
+        <Link style={styleLink} to="/">blogs</Link>
+        <Link style={styleLink} to="/users">users</Link>
+        <span style={styleUser}>
+          {login.name} logged in <button onClick={handleLogout}>logout</button>
+        </span>
+      </div>
+      <h2>blog app</h2>
 
       <Notification notification={notification} />
-
-      <p>
-        {login.name} logged in <button onClick={handleLogout}>logout</button>
-      </p>
 
       <Switch>
         <Route path="/users/:id">
