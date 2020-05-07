@@ -2,15 +2,15 @@ import loginService from '../services/login'
 import storage from '../utils/storage'
 import { setNotification } from './notificationReducer'
 
-const userReducer = (state = null, action) => {
+const loginReducer = (state = null, action) => {
   switch (action.type) {
-    case 'LOGIN_USER': {
+    case 'LOGIN': {
       return action.data
     }
-    case 'LOGOUT_USER': {
+    case 'LOGOUT': {
       return null
     }
-    case 'SET_LOADED_USER': {
+    case 'LOAD_LOGGED_USER': {
       return action.data
     }
     default: {
@@ -34,7 +34,7 @@ export const loginUser = (username, password) => {
       }, 5))
 
       dispatch({
-        type: 'LOGIN_USER',
+        type: 'LOGIN',
         data: user,
       })
     } catch (exception) {
@@ -51,7 +51,7 @@ export const logoutUser = () => {
     storage.removeUser()
 
     dispatch({
-      type: 'LOGOUT_USER',
+      type: 'LOGOUT',
     })
   }
 }
@@ -61,10 +61,10 @@ export const loadUser = () => {
     const user = storage.loadUser()
 
     dispatch({
-      type: 'SET_LOADED_USER',
+      type: 'LOAD_LOGGED_USER',
       data: user,
     })
   }
 }
 
-export default userReducer
+export default loginReducer
