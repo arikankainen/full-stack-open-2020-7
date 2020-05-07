@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
 
-import { initializeBlogs, addBlog, likeBlog, removeBlog } from './reducers/blogReducer'
+import { initializeBlogs, addBlog } from './reducers/blogReducer'
 import { loginUser, logoutUser, loadUser } from './reducers/loginReducer'
 
 import Blog from './components/Blog'
@@ -12,6 +12,7 @@ import Togglable from './components/Togglable'
 import NewBlog from './components/NewBlog'
 import Users from './components/Users'
 import User from './components/User'
+import BlogInfo from './components/BlogInfo'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -41,8 +42,6 @@ const App = () => {
       })
   }, [])
 
-  console.log(users)
-
   const handleLogin = async (event) => {
     event.preventDefault()
     dispatch(loginUser(username, password))
@@ -59,6 +58,7 @@ const App = () => {
     dispatch(addBlog(blog))
   }
 
+  /*
   const handleLike = async (id) => {
     const blogToLike = blogs.find(b => b.id === id)
     dispatch(likeBlog(blogToLike))
@@ -71,6 +71,17 @@ const App = () => {
       dispatch(removeBlog(blogToRemove))
     }
   }
+  */
+
+  const userMatch = useRouteMatch('/users/:id')
+  const user = userMatch
+    ? users.find(user => user.id === userMatch.params.id)
+    : null
+
+  const blogMatch = useRouteMatch('/blogs/:id')
+  const blog = blogMatch
+    ? blogs.find(blog => blog.id === blogMatch.params.id)
+    : null
 
   if ( !login ) {
     return (
@@ -116,10 +127,13 @@ const App = () => {
 
       <Switch>
         <Route path="/users/:id">
-          <User users={users} />
+          <User user={user} />
         </Route>
         <Route path="/users">
           <Users users={users} />
+        </Route>
+        <Route path="/blogs/:id">
+          <BlogInfo blog={blog} />
         </Route>
         <Route path="/">
           <Togglable buttonLabel='create new blog'  ref={blogFormRef}>
@@ -127,13 +141,7 @@ const App = () => {
           </Togglable>
 
           {blogs.sort(byLikes).map(blog =>
-            <Blog
-              key={blog.id}
-              blog={blog}
-              handleLike={handleLike}
-              handleRemove={handleRemove}
-              own={login.username===blog.user.username}
-            />
+            <Blog key={blog.id} blog={blog} />
           )}
         </Route>
       </Switch>
