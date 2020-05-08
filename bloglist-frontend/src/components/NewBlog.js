@@ -1,6 +1,27 @@
 import React, { useState } from 'react'
+import styled from 'styled-components'
 
-const NewBlog = (props) => {
+const Input = styled.input`
+  background: #333;
+  border: 1px solid #666;
+  padding: 2px;
+  color: var(--default-text-color);
+  margin-bottom: 5px;
+`
+const H2 = styled.h2`
+  margin-top: var(--default-margin);
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  color: var(--accent-color-1);
+`
+const Button = styled.button`
+  padding: 2px 5px;
+  margin: 0px 5px;
+  background: var(--accent-color-1);
+  border: none;
+`
+
+const NewBlog = ({ createBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -8,7 +29,7 @@ const NewBlog = (props) => {
   const handleNewBlog = (event) => {
     event.preventDefault()
 
-    props.createBlog({
+    createBlog({
       title, author, url
     })
 
@@ -19,33 +40,33 @@ const NewBlog = (props) => {
 
   return (
     <div>
-      <h2>create new</h2>
+      <H2>create new</H2>
       <form onSubmit={handleNewBlog}>
         <div>
-          author
-          <input
+          <div>author</div>
+          <Input
             id='author'
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
-          title
-          <input
+          <div>title</div>
+          <Input
             id='title'
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <div>
-          url
-          <input
+          <div>url</div>
+          <Input
             id='url'
             value={url}
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button id="create">create</button>
+        <Button id="create">create</Button>
       </form>
     </div>
   )

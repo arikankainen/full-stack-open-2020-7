@@ -1,20 +1,40 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
-const Blog = ({ blog }) => {
+const Container = styled.div`
+  margin: 10px 0px;
+  padding: 10px;
+  background: #333;
+`
+const BlogLink = styled(Link)`
+  font-family: 'Raleway', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: var(--accent-color-2);
+  text-decoration: none;
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
+  &:visited {
+    color: var(--accent-color-2);
   }
 
+  &:hover {
+    color: var(--accent-color-2-lighter);
+  }
+`
+const BlogAuthor = styled.div`
+  font-size: 14px;
+`
+const By = styled.span`
+  color: #888;
+`
+
+const Blog = ({ blog }) => {
   return (
-    <div style={blogStyle}>
-      <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}</Link>
-    </div>
+    <Container>
+      <BlogLink to={`/blogs/${blog.id}`}>{blog.title}</BlogLink>
+      <BlogAuthor><By>by</By> {blog.author}</BlogAuthor>
+    </Container>
   )
 }
 

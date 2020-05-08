@@ -96,7 +96,7 @@ export const likeBlog = (blog) => {
 
 export const addComment = (blog, comment) => {
   return async dispatch => {
-    const comments = [ ...blog.comments, comment ]
+    const comments = [...blog.comments, comment]
 
     await blogService.update({
       ...blog,

@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Switch, Route, useRouteMatch, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import axios from 'axios'
-
 import { initializeBlogs, addBlog } from './reducers/blogReducer'
 import { loginUser, logoutUser, loadUser } from './reducers/loginReducer'
-
 import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
@@ -13,6 +11,62 @@ import NewBlog from './components/NewBlog'
 import Users from './components/Users'
 import User from './components/User'
 import BlogInfo from './components/BlogInfo'
+import styled from 'styled-components'
+
+const Page = styled.div`
+  margin: var(--default-margin);
+`
+const Navigation = styled.div`
+  padding: 5px;
+  background: #292929;
+`
+const NavigationLink = styled(Link)`
+  padding: 10px;
+  font-size: 18px;
+  color: var(--accent-color-2);
+  text-decoration: none;
+
+  &:visited {
+    color: var(--accent-color-2);
+  }
+
+  &:hover {
+    color: var(--accent-color-2-lighter);
+  }
+`
+const H1 = styled.h1`
+  margin-bottom: var(--default-margin);
+  padding: 20px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 800;
+  color: var(--accent-color-1);
+  background: #333;
+`
+const LoggedUser = styled.span`
+  padding: 10px;
+  color: var(--default-text-color);
+`
+const LoginButton = styled.button`
+  padding: 2px 5px;
+  margin-top: 5px;
+  background: var(--accent-color-1);
+  border: none;
+`
+const Button = styled.button`
+  padding: 2px 5px;
+  margin: 0px 5px;
+  background: var(--accent-color-1);
+  border: none;
+`
+const Input = styled.input`
+  background: #333;
+  border: 1px solid #666;
+  padding: 2px;
+  color: var(--default-text-color);
+`
+const BlogsContainer = styled.div`
+  margin-top: var(--default-margin);
+`
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -59,11 +113,6 @@ const App = () => {
   }
 
   /*
-  const handleLike = async (id) => {
-    const blogToLike = blogs.find(b => b.id === id)
-    dispatch(likeBlog(blogToLike))
-  }
-
   const handleRemove = async (id) => {
     const blogToRemove = blogs.find(b => b.id === id)
     const ok = window.confirm(`Remove blog ${blogToRemove.title} by ${blogToRemove.author}`)
@@ -85,83 +134,72 @@ const App = () => {
 
   if ( !login ) {
     return (
-      <div>
-        <h2>login to application</h2>
+      <Page>
+        <H1>login to application</H1>
 
         <Notification notification={notification} />
 
         <form onSubmit={handleLogin}>
           <div>
-            username
-            <input
+            <div>username</div>
+            <Input
               id='username'
               value={username}
               onChange={({ target }) => setUsername(target.value)}
             />
           </div>
           <div>
-            password
-            <input
+            <div>password</div>
+            <Input
               id='password'
               value={password}
               onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button id='login'>login</button>
+          <LoginButton id='login'>login</LoginButton>
         </form>
-      </div>
+      </Page>
     )
   }
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
-  const styleMenu = {
-    backgroundColor: 'rgb(220, 220, 220)',
-    padding: 5,
-  }
-
-  const styleLink = {
-    padding: 10,
-  }
-
-  const styleUser = {
-    padding: 10,
-    paddingLeft: 20,
-  }
-
   return (
     <div>
-      <div style={styleMenu}>
-        <Link style={styleLink} to="/">blogs</Link>
-        <Link style={styleLink} to="/users">users</Link>
-        <span style={styleUser}>
-          {login.name} logged in <button onClick={handleLogout}>logout</button>
-        </span>
-      </div>
-      <h2>blog app</h2>
+      <Navigation>
+        <NavigationLink to="/">blogs</NavigationLink>
+        <NavigationLink to="/users">users</NavigationLink>
+        <LoggedUser>
+          {login.name} logged in <Button onClick={handleLogout}>logout</Button>
+        </LoggedUser>
+        <Notification notification={notification} />
+      </Navigation>
 
-      <Notification notification={notification} />
+      <Page>
+        <H1>blog app</H1>
 
-      <Switch>
-        <Route path="/users/:id">
-          <User user={user} />
-        </Route>
-        <Route path="/users">
-          <Users users={users} />
-        </Route>
-        <Route path="/blogs/:id">
-          <BlogInfo blog={blog} />
-        </Route>
-        <Route path="/">
-          <Togglable buttonLabel='create new blog'  ref={blogFormRef}>
-            <NewBlog createBlog={createBlog} />
-          </Togglable>
-
-          {blogs.sort(byLikes).map(blog =>
-            <Blog key={blog.id} blog={blog} />
-          )}
-        </Route>
-      </Switch>
+        <Switch>
+          <Route path="/users/:id">
+            <User user={user} />
+          </Route>
+          <Route path="/users">
+            <Users users={users} />
+          </Route>
+          <Route path="/blogs/:id">
+            <BlogInfo blog={blog} />
+          </Route>
+          <Route path="/">
+            <Togglable buttonLabel='create new blog' ref={blogFormRef}>
+              <NewBlog createBlog={createBlog} />
+            </Togglable>
+            <BlogsContainer>
+              {blogs.sort(byLikes).map(blog =>
+                <Blog key={blog.id} blog={blog} />
+              )}
+            </BlogsContainer>
+          </Route>
+        </Switch>
+      </Page>
     </div>
   )
 }
